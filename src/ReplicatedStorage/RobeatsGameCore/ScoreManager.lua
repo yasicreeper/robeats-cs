@@ -10,7 +10,7 @@ local HoldingNoteEffect2D = require(game.ReplicatedStorage.RobeatsGameCore.Effec
 local RenderableHit = require(game.ReplicatedStorage.RobeatsGameCore.RenderableHit)
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
-local Signal = require(game.ReplicatedStorage.Knit.Util.Signal)
+local Signal = require(game.ReplicatedStorage.Packages.Signal)
 
 local ScoreManager = {}
 

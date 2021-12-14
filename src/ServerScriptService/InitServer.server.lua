@@ -6,12 +6,12 @@ local sky = Instance.new("Sky")
 sky.CelestialBodiesShown = false
 sky.Parent = game.Lighting
 
-local Knit = require(game.ReplicatedStorage.Knit)
+local Knit = require(game.ReplicatedStorage.Packages.Knit)
 
 Knit.AddServices(game.ServerScriptService.Services)
 
-Knit.Start():Then(function()
+Knit.Start():andThen(function()
     print("Knit successfully started(server)")
-end):Catch(function(err)
+end):catch(function(err)
     warn(err)
 end)

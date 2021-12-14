@@ -3,7 +3,7 @@ local RoactRodux = require(game.ReplicatedStorage.Packages.RoactRodux)
 local e = Roact.createElement
 local State = require(game.ReplicatedStorage.State)
 
-local Promise = require(game.ReplicatedStorage.Knit.Util.Promise)
+local Promise = require(game.ReplicatedStorage.Packages.Promise)
 
 local Actions = require(game.ReplicatedStorage.Actions)
 

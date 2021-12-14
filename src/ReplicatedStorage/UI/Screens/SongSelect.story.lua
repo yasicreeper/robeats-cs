@@ -1,4 +1,4 @@
-local Promise = require(game.ReplicatedStorage.Knit.Util.Promise)
+local Promise = require(game.ReplicatedStorage.Packages.Promise)
 local Roact = require(game.ReplicatedStorage.Packages.Roact)
 local RoactRodux = require(game.ReplicatedStorage.Packages.RoactRodux)
 local State = require(game.ReplicatedStorage.State)

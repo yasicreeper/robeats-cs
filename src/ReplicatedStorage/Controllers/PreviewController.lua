@@ -1,6 +1,6 @@
 local Flipper = require(game.ReplicatedStorage.Packages.Flipper)
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local PreviewController = Knit.CreateController { Name = "PreviewController" }
 PreviewController.CanSpeakOnPlay = true

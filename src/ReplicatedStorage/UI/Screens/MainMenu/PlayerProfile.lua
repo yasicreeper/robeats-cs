@@ -27,17 +27,17 @@ function PlayerProfile:init()
         loaded = false
     })
 
-    self.scoreService:GetProfilePromise():andThen(function(profile)
+    self.scoreService:GetProfile():andThen(function(profile)
         if not Llama.isEmpty(profile) then
-            local tier = self.props.tierService:GetTierFromRating(profile.Rating)
+            local succeeded, tier = self.props.tierService:GetTierFromRating(profile.Rating):await()
 
             self:setState({
                 rank = profile.Rank,
                 rating = profile.Rating or 0,
                 accuracy = profile.Accuracy or 0,
                 totalMapsPlayed = profile.TotalMapsPlayed or 0,
-                tier = tier.name,
-                division = tier.division,
+                tier = if succeeded then tier.name else nil,
+                division = if succeeded then tier.division else nil,
                 loaded = true
             })
         else

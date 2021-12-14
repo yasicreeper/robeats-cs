@@ -1,4 +1,4 @@
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 

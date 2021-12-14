@@ -1,4 +1,4 @@
-local Knit = require(game.ReplicatedStorage.Knit)
+local Knit = require(game.ReplicatedStorage.Packages.Knit)
 
 local PermissionsService
 local ChatService

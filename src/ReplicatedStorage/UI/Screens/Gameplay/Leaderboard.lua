@@ -5,7 +5,7 @@ local Llama = require(game.ReplicatedStorage.Packages.Llama)
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local LeaderboardSlot = require(game.ReplicatedStorage.UI.Screens.Gameplay.LeaderboardSlot)
 
@@ -26,7 +26,7 @@ function Leaderboard:init()
 
     local ScoreService = Knit.GetService("ScoreService")
 
-    ScoreService:GetScoresPromise(SongDatabase:get_hash_for_key(self.props.SongKey), 8):andThen(function(scores)
+    ScoreService:GetScores(SongDatabase:get_hash_for_key(self.props.SongKey), 8):andThen(function(scores)
         self:setState({
             scores = scores
         })

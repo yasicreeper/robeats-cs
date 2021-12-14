@@ -12,7 +12,7 @@ local SPUtil = require(game.ReplicatedStorage.Shared.SPUtil)
 
 local Actions = require(game.ReplicatedStorage.Actions)
 
-local Maid = require(game.ReplicatedStorage.Knit.Util.Maid)
+local Trove = require(game.ReplicatedStorage.Packages.Trove)
 
 local withInjection = require(game.ReplicatedStorage.UI.Components.HOCs.withInjection)
 
@@ -37,7 +37,7 @@ function SongSelect:init()
         songListRobloxInstance = nil -- Used for scrolling frame manipulation
     })
 
-    self.maid = Maid.new()
+    self.Trove = Trove.new()
 
     self.uprate = function()
         if self.props.options.SongRate < 200 then
@@ -58,9 +58,9 @@ function SongSelect:init()
         self.props.history:push("/options")
     end)
 
-    self.maid:GiveTask(onUprateKeyPressed)
-    self.maid:GiveTask(onDownrateKeyPressed)
-    self.maid:GiveTask(onOptionsKeyPressed)
+    self.Trove:Add(onUprateKeyPressed)
+    self.Trove:Add(onDownrateKeyPressed)
+    self.Trove:Add(onOptionsKeyPressed)
 end
 
 function SongSelect:render()
@@ -95,7 +95,7 @@ function SongSelect:render()
             SongRate = self.state.filterByRate and self.props.options.SongRate or nil,
             IsAdmin = self.props.permissions.isAdmin,
             OnLeaderboardSlotClicked = function(stats)
-                local _, hits = self.scoreService:GetGraphPromise(stats.UserId, stats.SongMD5Hash)
+                local _, hits = self.scoreService:GetGraph(stats.UserId, stats.SongMD5Hash)
                     :await()
 
                 self.props.history:push("/results", Llama.Dictionary.join(stats, {
@@ -210,7 +210,7 @@ end
 
 function SongSelect:willUnmount()
     self.previewController:Silence()
-    self.maid:DoCleaning()
+    self.Trove:Destroy()
 end
 
 local Injected = withInjection(SongSelect, {

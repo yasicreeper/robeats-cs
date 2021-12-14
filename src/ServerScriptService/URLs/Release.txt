@@ -1,1 +1,1 @@
-https://rewrite.robeatscsgame.com/parse
+https://rewrite.robeatscsgame.com/api

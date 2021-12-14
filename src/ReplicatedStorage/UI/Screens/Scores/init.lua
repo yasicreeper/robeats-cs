@@ -20,11 +20,11 @@ function Scores:init()
     })
 
     if RunService:IsRunning() then
-        local Knit = require(game:GetService("ReplicatedStorage").Knit)
+        local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
         local ScoreService = Knit.GetService("ScoreService")
 
-        ScoreService:GetPlayerScoresPromise(self.props.location.state.userId):andThen(function(scores)
+        ScoreService:GetPlayerScores(self.props.location.state.userId):andThen(function(scores)
             self:setState({
                 scores = scores
             })
@@ -43,7 +43,7 @@ function Scores:render()
             OnClick = function()
                 local ScoreService = self.knit.GetService("ScoreService")
 
-                local _, hits = ScoreService:GetGraphPromise(score.UserId, score.SongMD5Hash)
+                local _, hits = ScoreService:GetGraph(score.UserId, score.SongMD5Hash)
                     :await()
 
                 self.props.history:push("/results", Llama.Dictionary.join(score, {

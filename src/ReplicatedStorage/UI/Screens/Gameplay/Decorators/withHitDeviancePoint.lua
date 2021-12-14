@@ -1,5 +1,5 @@
 local Flipper = require(game.ReplicatedStorage.Packages.Flipper)
-local Promise = require(game.ReplicatedStorage.Knit.Util.Promise)
+local Promise = require(game.ReplicatedStorage.Packages.Promise)
 
 local function withHitDeviancePoint(_hit_deviance_point)
     local motor = Flipper.SingleMotor.new(1)

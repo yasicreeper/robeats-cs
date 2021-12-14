@@ -24,7 +24,7 @@ function Rankings:init()
     self.scoreService = self.props.scoreService
     self.moderationService = self.props.moderationService
 
-    self.scoreService:GetGlobalLeaderboardPromise():andThen(function(players)
+    self.scoreService:GetGlobalLeaderboard():andThen(function(players)
         self:setState({
             players = players
         })

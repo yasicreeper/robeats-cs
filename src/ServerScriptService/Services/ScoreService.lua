@@ -1,4 +1,4 @@
-local Knit = require(game.ReplicatedStorage.Knit)
+local Knit = require(game.ReplicatedStorage.Packages.Knit)
 
 local DataStoreService = require(game.ReplicatedStorage.Packages.DataStoreService)
 local LocalizationService = game:GetService("LocalizationService")
@@ -7,32 +7,31 @@ local GraphDataStore = DataStoreService:GetDataStore("GraphDataStore")
 
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
+local RunService
+
 local PermissionsService
 local ModerationService
 local RateLimitService
+local AuthService
 
-local ParseServer
-
-local Scores
-local Global
-local Bans
+local Raxios
 
 local ScoreService = Knit.CreateService({
     Name = "ScoreService",
     Client = {}
 })
 
-function ScoreService:KnitStart()
+local url = require(game.ServerScriptService.URLs)
+
+function ScoreService:KnitInit()
+    RunService = game:GetService("RunService")
+
     PermissionsService = Knit.GetService("PermissionsService")
     ModerationService = Knit.GetService("ModerationService")
     RateLimitService = Knit.GetService("RateLimitService")
+    AuthService = Knit.GetService("AuthService")
 
-    local ParseServerService = Knit.GetService("ParseServerService")
-    ParseServer = ParseServerService:GetParse()
-
-    Scores = ParseServer.Objects.class("Plays")
-    Global = ParseServer.Objects.class("Global")
-    Bans = ParseServer.Objects.class("Bans")
+    Raxios = require(game.ReplicatedStorage.Packages.Raxios)
 end
 
 function ScoreService:_GetGraphKey(userId, songMD5Hash)
@@ -40,22 +39,11 @@ function ScoreService:_GetGraphKey(userId, songMD5Hash)
 end
 
 function ScoreService:GetPlayerScores(userId, limit)
-    local succeeded, documents = Scores
-        :query()
-        :where({
-            UserId = userId
-        })
-        :order("-Rating")
-        :limit(limit)
-        :execute()
-        :await()
+    local documents = Raxios.get(url "/scores/player", {
+        query = { userid = userId, auth = AuthService.APIKey }
+    })
 
-    if succeeded then
-        return documents, succeeded
-    else
-        warn(documents)
-        return {}, succeeded
-    end
+    return documents:json()
 end
 
 function ScoreService:CalculateRating(scores)
@@ -83,75 +71,11 @@ function ScoreService:CalculateAverageAccuracy(scores)
     return accuracy / #scores
 end
 
-function ScoreService:RefreshProfile(player)
-    local scores, succeeded = self:GetPlayerScores(player.UserId)
-
-    if succeeded then
-        local _succeeded, slots = Global
-                :query()
-                :where({
-                    UserId = player.UserId
-                })
-                :execute()
-                :await()
-
-        if _succeeded then
-            local slot = slots[1]
-
-            if slot then
-                Global
-                    :update(slot.objectId, {
-                        TotalMapsPlayed = {
-                            __op = "Increment",
-                            amount = 1
-                        },
-                        Rating = ScoreService:CalculateRating(scores),
-                        Accuracy = ScoreService:CalculateAverageAccuracy(scores),
-                        PlayerName = player.DisplayName,
-                        UserId = player.UserId
-                    })
-                    :andThen(function(document)
-                        DebugOut:puts("Global leaderboard slot successfully updated!")
-                    end)
-                else
-                    Global
-                        :create({
-                            TotalMapsPlayed = 1,
-                            Rating = ScoreService:CalculateRating(scores),
-                            Accuracy = ScoreService:CalculateAverageAccuracy(scores),
-                            PlayerName = player.DisplayName,
-                            CountryRegion = LocalizationService:GetCountryRegionForPlayerAsync(player),
-                            Allowed = true,
-                            UserId = player.UserId
-                        })
-                        :andThen(function(document)
-                            DebugOut:puts("Global leaderboard slot successfully created!")
-                        end)
-            end
-        end
-    else
-        warn("Global leaderboard slot could not be updated because retrieving user scores failed! Error:", scores)
-    end
-end
-
 function ScoreService:IsBanned(player)
-    local succeeded, documents = Bans
-        :query()
-        :where({
-            UserId = player.UserId
-        })
-        :execute()
-        :await()
-
-    if succeeded then
-        local ban = documents[1]
-
-        if ban then
-            return true, ban.Reason
-        end
-    end
-
-    return false
+    return Raxios.get(url "/bans", {
+        userid = player.UserId,
+        auth = AuthService.APIKey
+    })
 end
 
 function ScoreService.Client:SubmitScore(player, songMD5Hash, rating, score, marvelouses, perfects, greats, goods, bads, misses, accuracy, maxChain, mean, rate, mods)
@@ -259,24 +183,9 @@ end
 
 function ScoreService.Client:GetScores(player, songMD5Hash, limit, songRate)
     if RateLimitService:CanProcessRequestWithRateLimit(player, "GetScores", 2) then
-        local succeeded, documents = Scores
-            :query()
-            :where({
-                SongMD5Hash = songMD5Hash,
-                Rate = songRate,
-                Allowed = true
-            })
-            :limit(limit)
-            :order("-Rating")
-            :execute()
-            :await()
-
-        if succeeded then
-            return documents, succeeded
-        else
-            warn(documents)
-            return {}, succeeded
-        end
+        return Raxios.get(url "/scores", {
+            query = { hash = songMD5Hash, limit = limit, rate = songRate, auth = AuthService.APIKey }
+        }):json()
     end
 
     return {}, false
@@ -284,17 +193,9 @@ end
 
 function ScoreService.Client:GetProfile(player)
     if RateLimitService:CanProcessRequestWithRateLimit(player, "GetProfile", 2) then
-        local succeeded, profile = ParseServer.Functions.call("profile", {
-            userid = player.UserId
-        })
-        :await()
-
-        if succeeded then
-            return profile
-        else
-            warn(profile)
-            return {}
-        end
+        return Raxios.get(url "/profiles", {
+            query = { userid = player.UserId, auth = AuthService.APIKey }
+        }):json()
     end
 
     return {}
@@ -302,22 +203,9 @@ end
 
 function ScoreService.Client:GetGlobalLeaderboard(player)
     if RateLimitService:CanProcessRequestWithRateLimit(player, "GetGlobalLeaderboard", 3) then
-        local succeeded, ranks = Global
-            :query()
-            :where({
-                Allowed = true
-            })
-            :order("-Rating")
-            :limit(50)
-            :execute()
-            :await()
-
-        if succeeded then
-            return ranks
-        end
-
-        warn(ranks)
-        return {}
+        return Raxios.get(url "/profiles/top", {
+            query = { auth = AuthService.APIKey }
+        }):json()
     end
 
     return {}

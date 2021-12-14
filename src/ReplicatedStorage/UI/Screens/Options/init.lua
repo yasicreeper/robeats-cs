@@ -38,7 +38,7 @@ function Options:init()
     })
 
     if RunService:IsRunning() then
-        self.knit = require(game:GetService("ReplicatedStorage").Knit)
+        self.knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
     end
 end
 
@@ -442,7 +442,7 @@ end
 function Options:willUnmount()
     if self.knit then
         local SettingsService = self.knit.GetService("SettingsService")
-        SettingsService:SetSettingsPromise(self.props.options)
+        SettingsService:SetSettings(self.props.options)
         :andThen(function()
             DebugOut:puts("Successfully saved settings!")
         end)

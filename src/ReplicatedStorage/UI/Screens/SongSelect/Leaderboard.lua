@@ -41,7 +41,7 @@ function Leaderboard:performFetch()
         loading = true
     })
 
-    self.scoreService:GetScoresPromise(songMD5Hash, self.props.ScoreLimit, self.props.SongRate):andThen(function(scores)
+    self.scoreService:GetScores(songMD5Hash, self.props.ScoreLimit, self.props.SongRate):andThen(function(scores)
         self:setState({
             scores = scores,
             loading = false

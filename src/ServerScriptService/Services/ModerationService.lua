@@ -1,4 +1,4 @@
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local DebugOut = require(game.ReplicatedStorage.Shared.DebugOut)
 
@@ -8,9 +8,11 @@ local ModerationService = Knit.CreateService {
 }
 
 local PermissionsService
+local AuthService
 
-local ParseServer
-local Bans
+local Raxios
+
+local url = require(game.ServerScriptService.URLs)
 
 function ModerationService:OnPlayerAdded(player)
     -- Check if the user's account age is too young to join the game
@@ -19,31 +21,23 @@ function ModerationService:OnPlayerAdded(player)
         player:Kick(string.format("Your account must be older than 2 days to join this game. %d days left", 2 - player.AccountAge))
     end
 
-    -- Query Parse to see if the user is banned
+    -- Query to see if the user is banned
 
-    Bans
-        :query()
-        :where({
-            UserId = player.UserId
-        })
-        :execute()
-        :andThen(function(documents)
-            local ban = documents[1]
+    local ban = Raxios.get(url "/bans", {
+        query = { userid = player.UserId, auth = AuthService.APIKey }
+    }):json()
 
-            if ban then
-                player:Kick(ban.Reason)
-            end
-        end)
+    if ban then
+        player:Kick(ban.Reason)
+    end
 end
 
 
 function ModerationService:KnitStart()
     PermissionsService = Knit.GetService("PermissionsService")
-    
-    local ParseServerService = Knit.GetService("ParseServerService")
-    ParseServer = ParseServerService:GetParse()
-    
-    Bans = ParseServer.Objects.class("Bans")
+    AuthService = Knit.GetService("AuthService")
+
+    Raxios = require(game.ReplicatedStorage.Packages.Raxios)
     
     game.Players.PlayerAdded:Connect(function(player)
         self:OnPlayerAdded(player)

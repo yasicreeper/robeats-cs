@@ -26,7 +26,7 @@ function noop() end
 
 function Results:init()
 	if RunService:IsRunning() then
-		self.knit = require(game:GetService("ReplicatedStorage").Knit)
+		self.knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 	end
 
 	self.gradeImages = {

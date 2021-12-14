@@ -26,7 +26,7 @@ local LeaderboardPositions = require(game.ReplicatedStorage.LeaderboardPositions
 
 local withHitDeviancePoint = require(script.Decorators.withHitDeviancePoint)
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local Lighting = game:GetService("Lighting")
 
@@ -133,7 +133,7 @@ function Gameplay:init()
             
             if (not self.forcedQuit) and (self.props.options.TimingPreset == "Standard") then
                 local md5Hash = SongDatabase:get_md5_hash_for_key(self.props.options.SongKey)
-                ScoreService:SubmitScorePromise(
+                ScoreService:SubmitScore(
                     md5Hash,
                     rating,
                     self.state.score,

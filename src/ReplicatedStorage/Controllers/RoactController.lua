@@ -1,4 +1,4 @@
-local Knit = require(game.ReplicatedStorage.Knit)
+local Knit = require(game.ReplicatedStorage.Packages.Knit)
 local Roact = require(game.ReplicatedStorage.Packages.Roact)
 local RoactRouter = require(game.ReplicatedStorage.Packages.RoactRouter)
 local RoactRodux = require(game.ReplicatedStorage.Packages.RoactRodux)

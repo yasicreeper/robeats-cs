@@ -15,7 +15,7 @@ dependencies = []
 [[package]]
 name = "kisperal/robeats-cs"
 version = "0.1.0"
-dependencies = [["DataStoreService", "nomer888/mockdatastoreservice@1.0.1"], ["Fitumi", "bytebit/fitumi@1.0.11"], ["Flipper", "reselim/flipper@2.0.0"], ["Llama", "shanebutt/llama@1.1.0"], ["ParseServer", "thenerdie/rbx-parse-server@0.1.3"], ["Roact", "roblox/roact@1.4.2"], ["RoactFlipper", "reselim/roact-flipper@1.1.0"], ["RoactRodux", "roblox/roact-rodux@0.3.0"], ["RoactRouter", "thenerdie/roact-router@1.0.0"], ["Rodux", "roblox/rodux@3.0.0"]]
+dependencies = [["DataStoreService", "nomer888/mockdatastoreservice@1.0.1"], ["Fitumi", "bytebit/fitumi@1.0.11"], ["Flipper", "reselim/flipper@2.0.0"], ["Knit", "sleitnick/knit@1.2.0"], ["Llama", "shanebutt/llama@1.1.0"], ["ParseServer", "thenerdie/rbx-parse-server@0.1.3"], ["Promise", "evaera/promise@3.1.0"], ["Raxios", "thenerdie/raxios@1.0.1"], ["Roact", "roblox/roact@1.4.2"], ["RoactFlipper", "reselim/roact-flipper@1.1.0"], ["RoactRodux", "roblox/roact-rodux@0.3.0"], ["RoactRouter", "thenerdie/roact-router@1.0.0"], ["Rodux", "roblox/rodux@3.0.0"], ["Signal", "sleitnick/signal@1.0.1"], ["Trove", "sleitnick/trove@0.1.3"]]
 
 [[package]]
 name = "nomer888/mockdatastoreservice"
@@ -60,6 +60,36 @@ dependencies = [["TestEZ", "roblox/testez@0.4.1"], ["t", "shanebutt/t@1.3.1"]]
 [[package]]
 name = "shanebutt/t"
 version = "1.3.1"
+dependencies = []
+
+[[package]]
+name = "sleitnick/comm"
+version = "0.1.2"
+dependencies = [["Option", "sleitnick/option@1.0.2"], ["Promise", "evaera/promise@3.1.0"], ["Signal", "sleitnick/signal@1.0.1"]]
+
+[[package]]
+name = "sleitnick/knit"
+version = "1.2.0"
+dependencies = [["Comm", "sleitnick/comm@0.1.2"], ["Promise", "evaera/promise@3.1.0"]]
+
+[[package]]
+name = "sleitnick/option"
+version = "1.0.2"
+dependencies = []
+
+[[package]]
+name = "sleitnick/signal"
+version = "1.0.1"
+dependencies = []
+
+[[package]]
+name = "sleitnick/trove"
+version = "0.1.3"
+dependencies = []
+
+[[package]]
+name = "thenerdie/raxios"
+version = "1.0.1"
 dependencies = []
 
 [[package]]

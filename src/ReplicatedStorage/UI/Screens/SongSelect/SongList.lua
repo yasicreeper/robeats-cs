@@ -2,7 +2,7 @@ local Roact = require(game.ReplicatedStorage.Packages.Roact)
 local e = Roact.createElement
 local Llama = require(game.ReplicatedStorage.Packages.Llama)
 
-local Promise = require(game.ReplicatedStorage.Knit.Util.Promise)
+local Promise = require(game.ReplicatedStorage.Packages.Promise)
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
