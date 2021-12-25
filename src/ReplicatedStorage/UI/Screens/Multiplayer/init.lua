@@ -68,7 +68,7 @@ function Multiplayer:render()
             Text = "Create",
             TextSize = 12,
             OnClick = function()
-                self.props.multiplayerService:AddRoomPromise("unforget", "me"):andThen(function(id)
+                self.props.multiplayerService:AddRoom("unforget", "me"):andThen(function(id)
                     self.props.history:push("/room", {
                         roomId = id
                     })

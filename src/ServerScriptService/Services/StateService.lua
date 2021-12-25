@@ -1,5 +1,4 @@
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local RemoteSignal = require(game.ReplicatedStorage.Knit.Util.Remote.RemoteSignal)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local Rodux = require(game.ReplicatedStorage.Packages.Rodux)
 
@@ -7,7 +6,9 @@ local MultiplayerReducer = require(game.ReplicatedStorage.Reducers.MultiplayerRe
 
 local StateService = Knit.CreateService {
     Name = "StateService";
-    Client = {};
+    Client = {
+        ActionDispatched = Knit.CreateSignal()
+    };
 }
 
 local function replicationMiddleware(nextDispatch)
@@ -28,7 +29,5 @@ end
 function StateService.Client:GetState()
     return StateService.Store:getState()
 end
-
-StateService.Client.ActionDispatched = RemoteSignal.new()
 
 return StateService

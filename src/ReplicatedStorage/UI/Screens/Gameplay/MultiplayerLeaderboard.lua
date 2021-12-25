@@ -5,7 +5,7 @@ local Llama = require(game.ReplicatedStorage.Packages.Llama)
 
 local SongDatabase = require(game.ReplicatedStorage.RobeatsGameCore.SongDatabase)
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
 local LeaderboardSlot = require(game.ReplicatedStorage.UI.Screens.Gameplay.LeaderboardSlot)
 

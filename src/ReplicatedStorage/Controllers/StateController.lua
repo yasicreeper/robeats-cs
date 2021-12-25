@@ -38,7 +38,9 @@ function StateController:KnitStart()
         -- print(action, self.Store:getState().multiplayer)
     end)
 
-    self.Store:dispatch({ type = "setState", state = StateService:GetState() })
+    local _, state = StateService:GetState():await()
+
+    self.Store:dispatch({ type = "setState", state = state })
 end
 
 return StateController

@@ -138,10 +138,13 @@ local Injected = withInjection(Room, {
 return RoactRodux.connect(function(state, props)
     local userId = game.Players.LocalPlayer and game.Players.LocalPlayer.UserId
 
+    print(props)
+
+    local room = state.multiplayer.rooms[props.location.state.roomId]
+
     return {
-        room = state.multiplayer.rooms[props.location.state.roomId],
+        room = room,
         roomId = props.location.state.roomId,
-        match = state.multiplayer.matches[props.location.state.roomId],
-        isHost = state.multiplayer.rooms[props.location.state.roomId].host and userId == state.multiplayer.rooms[props.location.state.roomId].host.UserId or false
+        isHost = if room.host then userId == state.multiplayer.rooms[props.location.state.roomId].host.UserId else false
     }
 end)(Injected)
