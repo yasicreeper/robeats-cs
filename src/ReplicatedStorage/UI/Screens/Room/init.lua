@@ -140,11 +140,11 @@ return RoactRodux.connect(function(state, props)
 
     print(props)
 
-    local room = state.multiplayer.rooms[props.location.state.roomId]
+    local Room = state.multiplayer.rooms[props.location.state.roomId]
 
     return {
-        room = room,
+        room = Room,
         roomId = props.location.state.roomId,
-        isHost = if room.host then userId == state.multiplayer.rooms[props.location.state.roomId].host.UserId else false
+        isHost = if Room.host then userId == state.multiplayer.rooms[props.location.state.roomId].host.UserId else false
     }
 end)(Injected)
